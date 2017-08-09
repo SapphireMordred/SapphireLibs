@@ -1,5 +1,6 @@
 #include "ExdCat.h"
 
+#include <fstream>
 #include <boost/assign/list_of.hpp>
 
 #include "GameData.h"
