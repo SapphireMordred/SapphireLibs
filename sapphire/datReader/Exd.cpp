@@ -66,7 +66,7 @@ namespace xiv
       {
 
          // Iterates over all the files
-         const uint32_t member_count = _exh->get_members().size();
+         const uint32_t member_count = static_cast< uint32_t >( _exh->get_members().size() );
          for( auto& file_ptr : _files )
          {
             // Get a stream
@@ -178,7 +178,7 @@ namespace xiv
       const std::map<uint32_t, std::vector<Field>>& Exd::get_rows()
       {
          // Iterates over all the files
-         const uint32_t member_count = _exh->get_members().size();
+         const uint32_t member_count = static_cast< uint32_t >( _exh->get_members().size() );
          for( auto& file_ptr : _files )
          {
             // Get a stream

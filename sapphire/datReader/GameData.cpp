@@ -178,8 +178,8 @@ void GameData::get_hashes(const std::string& i_path, uint32_t& o_dir_hash, uint3
     std::string filename_part = path_lower.substr(last_slash_pos + 1);
 
     // Get the crc32 values from zlib, to compensate the final XOR 0xFFFFFFFF that isnot done in the exe we just reXOR
-    o_dir_hash = crc32(0, reinterpret_cast<const uint8_t*>(dir_part.data()), dir_part.size()) ^ 0xFFFFFFFF;
-    o_filename_hash = crc32(0, reinterpret_cast<const uint8_t*>(filename_part.data()), filename_part.size()) ^ 0xFFFFFFFF;
+    o_dir_hash = crc32(0, reinterpret_cast<const uint8_t*>(dir_part.data()), static_cast< uInt >( dir_part.size() )) ^ 0xFFFFFFFF;
+    o_filename_hash = crc32(0, reinterpret_cast<const uint8_t*>(filename_part.data()), static_cast< uInt >( filename_part.size() )) ^ 0xFFFFFFFF;
 }
 
 void GameData::create_category(uint32_t i_cat_nb)

@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 project(Sapphire)
 
 include_directories("../../external/")
-# todo: fix standalone build
+
 if(UNIX)
-  include_directories("/usr/include/mysql/")
+  include_directories(${MYSQLCLIENT_INCLUDE_DIRS})
   
 else()
   include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../../external/MySQL/")
@@ -18,3 +18,5 @@ file(GLOB UTILS_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(mysqlConnector ${UTILS_PUBLIC_INCLUDE_FILES} ${UTILS_SOURCE_FILES})
+
+include_directories(${Boost_INCLUDE_DIRS})

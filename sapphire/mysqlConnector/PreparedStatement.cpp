@@ -78,9 +78,9 @@ public:
 
       while( sent < str->length() )
       {
-         chunkSize = ( sent + MAX_SEND_LONGDATA_CHUNK > str->length()
+         chunkSize = static_cast< uint32_t >( ( sent + MAX_SEND_LONGDATA_CHUNK > str->length()
                      ? str->length() - sent
-                     : MAX_SEND_LONGDATA_CHUNK );
+                     : MAX_SEND_LONGDATA_CHUNK ) );
 
          if( mysql_stmt_send_long_data( m_pStmt, position, str->c_str() + sent, chunkSize ) )
          {

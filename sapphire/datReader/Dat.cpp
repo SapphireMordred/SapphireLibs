@@ -229,7 +229,7 @@ namespace xiv
          DatBlockHeader block_header = extract<DatBlockHeader>( _handle );
 
          // Resizing the vector to write directly into it
-         const uint32_t data_size = o_data.size();
+         const uint32_t data_size = static_cast< uint32_t >( o_data.size() );
          o_data.resize( data_size + block_header.uncompressed_size );
 
          // 32000 in compressed_size means it is not compressed so take uncompressed_size
@@ -245,7 +245,7 @@ namespace xiv
             _handle.read( temp_buffer.data(), block_header.compressed_size );
 
             utils::zlib::no_header_decompress( reinterpret_cast< uint8_t* >( temp_buffer.data() ),
-               temp_buffer.size(),
+               static_cast< uint32_t >( temp_buffer.size() ),
                reinterpret_cast< uint8_t* >( o_data.data() + data_size ),
                block_header.uncompressed_size );
          }
