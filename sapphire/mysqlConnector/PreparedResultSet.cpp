@@ -45,8 +45,8 @@ uint32_t Mysql::PreparedResultSet::findColumn( const std::string &columnLabel ) 
 Mysql::PreparedResultSet::PreparedResultSet( boost::shared_ptr< ResultBind >& pBind,
                                              boost::shared_ptr< Mysql::PreparedStatement > par ) :
    ResultSet( nullptr, par ),
-   m_pResultBind( pBind ),
-   m_pStmt( par )
+   m_pStmt( par ),
+   m_pResultBind(pBind)
 {
    pBind->bindResult();
 
