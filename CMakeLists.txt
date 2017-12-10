@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.1)
 project(Sapphire)
 
 include(cmake/compiler.cmake)
-include(cmake/FindBoost.cmake)
 
 if(UNIX)
   find_package(PkgConfig REQUIRED)
