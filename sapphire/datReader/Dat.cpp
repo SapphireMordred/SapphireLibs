@@ -77,7 +77,7 @@ namespace xiv
          template <> inline void reorder<xiv::dat::DatBlockRecord>( xiv::dat::DatBlockRecord& i_struct ) { xiv::utils::bparse::reorder( i_struct.offset );   xiv::utils::bparse::reorder( i_struct.size );   for( int32_t i = 0; i < 0x4; ++i ) { xiv::utils::bparse::reorder( i_struct.unknown[i] ); }   xiv::utils::bparse::reorder( i_struct.block_hash ); }
          template <> inline void reorder<xiv::dat::DatBlockHeader>( xiv::dat::DatBlockHeader& i_struct ) { xiv::utils::bparse::reorder( i_struct.size );   xiv::utils::bparse::reorder( i_struct.unknown1 );   xiv::utils::bparse::reorder( i_struct.compressed_size );   xiv::utils::bparse::reorder( i_struct.uncompressed_size ); }
          template <> inline void reorder<xiv::dat::DatStdFileBlockInfos>( xiv::dat::DatStdFileBlockInfos& i_struct ) { xiv::utils::bparse::reorder( i_struct.offset );   xiv::utils::bparse::reorder( i_struct.size );   xiv::utils::bparse::reorder( i_struct.uncompressed_size ); }
-         template <> inline void reorder<xiv::dat::DatMdlFileBlockInfos>( xiv::dat::DatMdlFileBlockInfos& i_struct ) { xiv::utils::bparse::reorder( i_struct.unknown1 );   for( auto i = 0; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.uncompressed_sizes[i] ); }   for( auto i = 0; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.compressed_sizes[i] ); }   for( auto i = 0; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.offsets[i] ); }   for( auto i = 0; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.block_ids[i] ); }   for( auto i = 0; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.block_counts[i] ); }   for( auto i = 0; i < 0x2; ++i ) { xiv::utils::bparse::reorder( i_struct.unknown2[i] ); } }
+         template <> inline void reorder<xiv::dat::DatMdlFileBlockInfos>( xiv::dat::DatMdlFileBlockInfos& i_struct ) { xiv::utils::bparse::reorder( i_struct.unknown1 );   for( auto i = 0u; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.uncompressed_sizes[i] ); }   for( auto i = 0u; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.compressed_sizes[i] ); }   for( auto i = 0u; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.offsets[i] ); }   for( auto i = 0u; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.block_ids[i] ); }   for( auto i = 0u; i < ::model_section_count; ++i ) { xiv::utils::bparse::reorder( i_struct.block_counts[i] ); }   for( auto i = 0; i < 0x2; ++i ) { xiv::utils::bparse::reorder( i_struct.unknown2[i] ); } }
          template <> inline void reorder<xiv::dat::DatTexFileBlockInfos>( xiv::dat::DatTexFileBlockInfos& i_struct ) { xiv::utils::bparse::reorder( i_struct.offset );   xiv::utils::bparse::reorder( i_struct.size );   xiv::utils::bparse::reorder( i_struct.uncompressed_size );   xiv::utils::bparse::reorder( i_struct.block_id );   xiv::utils::bparse::reorder( i_struct.block_count ); }
       }
    }
@@ -229,7 +229,7 @@ namespace xiv
          DatBlockHeader block_header = extract<DatBlockHeader>( _handle );
 
          // Resizing the vector to write directly into it
-         const uint32_t data_size = o_data.size();
+         const uint32_t data_size = static_cast< uint32_t >( o_data.size() );
          o_data.resize( data_size + block_header.uncompressed_size );
 
          // 32000 in compressed_size means it is not compressed so take uncompressed_size
@@ -245,7 +245,7 @@ namespace xiv
             _handle.read( temp_buffer.data(), block_header.compressed_size );
 
             utils::zlib::no_header_decompress( reinterpret_cast< uint8_t* >( temp_buffer.data() ),
-               temp_buffer.size(),
+               static_cast< uint32_t >( temp_buffer.size() ),
                reinterpret_cast< uint8_t* >( o_data.data() + data_size ),
                block_header.uncompressed_size );
          }

@@ -81,11 +81,11 @@ namespace Mysql
       }
 
       ResultBind::ResultBind( MYSQL_STMT* pStmt )
-              : m_pStmt( pStmt ),
-                m_numFields( 0 ),
+              : m_numFields( 0 ),
                 m_isNull( nullptr ),
                 m_err( nullptr ),
                 m_len( nullptr ),
+                m_pStmt(pStmt),
                 m_pBind( nullptr )
       {
       }

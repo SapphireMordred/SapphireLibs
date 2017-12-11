@@ -105,7 +105,7 @@ uint32_t rev_compute(const std::string& i_input, uint32_t init_crc)
 void generate_hashes_1(std::string& i_format, const uint32_t i_first_index, std::vector<uint32_t>& o_hashes)
 {
 	char* str = const_cast<char*>(i_format.data());
-	const uint32_t str_size = i_format.size();
+	const uint32_t str_size = static_cast< uint32_t >( i_format.size() );
 
 	o_hashes.resize(10000);
 
@@ -133,7 +133,7 @@ void generate_hashes_1(std::string& i_format, const uint32_t i_first_index, std:
 void generate_hashes_2(std::string& i_format, const uint32_t i_first_index, const uint32_t i_second_index, std::vector<uint32_t>& o_hashes)
 {
 	char* str = const_cast<char*>(i_format.data());
-	const uint32_t str_size = i_format.size();
+	const uint32_t str_size = static_cast< uint32_t >( i_format.size() );
 
 	o_hashes.resize(100000000);
 

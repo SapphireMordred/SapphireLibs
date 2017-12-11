@@ -165,7 +165,7 @@ bool Mysql::Connection::getAutoCommit()
 {
    // TODO: should be replaced with wrapped sql query function once available
    std::string query("SELECT @@autocommit");
-   auto res = mysql_real_query( m_pRawCon, query.c_str(), query.length() );
+   auto res = mysql_real_query( m_pRawCon, query.c_str(), static_cast< unsigned long >( query.length() ) );
 
    if( res != 0 )
       throw std::runtime_error( "Query failed!" );
@@ -237,7 +237,7 @@ boost::shared_ptr< Mysql::PreparedStatement > Mysql::Connection::prepareStatemen
    if( !stmt )
       throw std::runtime_error( "Could not init prepared statement: " + getError() );
 
-   if( mysql_stmt_prepare( stmt, sql.c_str(), sql.size() ) )
+   if( mysql_stmt_prepare( stmt, sql.c_str(), static_cast< unsigned long >( sql.size() ) ) )
       throw std::runtime_error( "Could not prepare statement: " + getError() );
 
    return boost::make_shared< PreparedStatement >( stmt, shared_from_this() );
