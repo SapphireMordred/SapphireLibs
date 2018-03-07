@@ -4,9 +4,7 @@
 #include <sstream>
 #include <algorithm>
 
-#include <boost/assign/list_of.hpp>
-#include <boost/bimap.hpp>
-
+#include <map>
 #include <zlib/zlib.h>
 
 #include "bparse.h"
@@ -17,20 +15,39 @@ namespace
 {
     // Relation between category number and category name
     // These names are taken straight from the exe, it helps resolve dispatching when getting files by path
-    boost::bimap<std::string, uint32_t> categoryMap = boost::assign::list_of<boost::bimap<std::string, uint32_t>::relation>
-        ("common",          0x00)
-        ("bgcommon",        0x01)
-        ("bg",              0x02)
-        ("cut",             0x03)
-        ("chara",           0x04)
-        ("shader",          0x05)
-        ("ui",              0x06)
-        ("sound",           0x07)
-        ("vfx",             0x08)
-        ("ui_script",       0x09)
-        ("exd",             0x0A)
-        ("game_script",     0x0B)
-        ("music",           0x0C);
+   static std::map<std::string, uint32_t> catNameToIdMap =
+   {
+        {"common",          0x00},
+        {"bgcommon",        0x01},
+        {"bg",              0x02},
+        {"cut",             0x03},
+        {"chara",           0x04},
+        {"shader",          0x05},
+        {"ui",              0x06},
+        {"sound",           0x07},
+        {"vfx",             0x08},
+        {"ui_script",       0x09},
+        {"exd",             0x0A},
+        {"game_script",     0x0B},
+        {"music",           0x0C}
+   };
+
+   static std::map<uint32_t, std::string> catIdToNameMap =
+   {
+      {0x00, "common"     },
+      {0x01, "bgcommon"   },
+      {0x02, "bg",        },
+      {0x03, "cut"        },
+      {0x04, "chara"      },
+      {0x05, "shader"     },
+      {0x06, "ui",        },
+      {0x07, "sound",     },
+      {0x08, "vfx",       },
+      {0x09, "ui_script"  },
+      {0x0A, "exd",       },
+      {0x0B, "game_script"},
+      {0x0C, "music",     }
+   };
 }
 
 namespace xiv
@@ -86,7 +103,7 @@ GameData::GameData(const boost::filesystem::path& path) try :
                {
                   if( boost::filesystem::exists( m_path.string() + "\\" + buildDatStr( "ex" + std::to_string( exNum ), cat_nb, exNum, chunkTest, "win32", "index" ) ) )
                   {
-                     m_exCats[cat_nb][exNum][chunkTest] = std::unique_ptr<Cat>();
+                     m_exCats[cat_nb].exNumToChunkMap[exNum].chunkToCatMap[chunkTest] = std::unique_ptr<Cat>();
                      chunkCount++;
                   }
                }      
@@ -173,8 +190,8 @@ const Cat& GameData::getCategory(uint32_t catNum)
 const Cat& GameData::getCategory(const std::string& catName)
 {
    // Find the category number from the name
-   auto categoryMapIt = ::categoryMap.left.find( catName );
-   if( categoryMapIt == ::categoryMap.left.end() )
+   auto categoryMapIt = ::catNameToIdMap.find( catName );
+   if( categoryMapIt == ::catNameToIdMap.end() )
    {
       throw std::runtime_error( "Category not found: " + catName );
    }
@@ -186,8 +203,8 @@ const Cat& GameData::getCategory(const std::string& catName)
 const Cat& GameData::getExCategory( const std::string& catName, uint32_t exNum, const std::string& path )
 {
    // Find the category number from the name
-   auto categoryMapIt = ::categoryMap.left.find( catName );
-   if( categoryMapIt == ::categoryMap.left.end() )
+   auto categoryMapIt = ::catNameToIdMap.find( catName );
+   if( categoryMapIt == ::catNameToIdMap.end() )
    {
       throw std::runtime_error( "Category not found: " + catName );
    }
@@ -196,7 +213,7 @@ const Cat& GameData::getExCategory( const std::string& catName, uint32_t exNum, 
    uint32_t filenameHash;
    getHashes( path, dirHash, filenameHash );
 
-   for( auto const& chunk : m_exCats[categoryMapIt->second][exNum] )
+   for( auto const& chunk : m_exCats[categoryMapIt->second].exNumToChunkMap[exNum].chunkToCatMap )
    {
       if( !chunk.second )
          createExCategory( categoryMapIt->second );
@@ -261,8 +278,8 @@ void GameData::createCategory(uint32_t catNum)
    {
       // Get the category name if we have it
       std::string catName;
-      auto categoryMapIt = ::categoryMap.right.find( catNum );
-      if( categoryMapIt != ::categoryMap.right.end() )
+      auto categoryMapIt = ::catIdToNameMap.find( catNum );
+      if( categoryMapIt != ::catIdToNameMap.end() )
       {
          catName = categoryMapIt->second;
       }
@@ -275,22 +292,22 @@ void GameData::createCategory(uint32_t catNum)
 void GameData::createExCategory( uint32_t catNum )
 {
    // Maybe after unlocking it has already been created, so check (most likely if it blocked)
-   if( !m_exCats[catNum][1][0] )
+   if( !m_exCats[catNum].exNumToChunkMap[1].chunkToCatMap[0] )
    {
       // Get the category name if we have it
       std::string catName;
-      auto categoryMapIt = ::categoryMap.right.find( catNum );
-      if( categoryMapIt != ::categoryMap.right.end() )
+      auto categoryMapIt = ::catIdToNameMap.find( catNum );
+      if( categoryMapIt != ::catIdToNameMap.end() )
       {
          catName = categoryMapIt->second;
       }
 
-      for( auto const& ex : m_exCats[catNum])
+      for( auto const& ex : m_exCats[catNum].exNumToChunkMap )
       {
-         for( auto const& chunk : m_exCats[catNum][ex.first] )
+         for( auto const& chunk : m_exCats[catNum].exNumToChunkMap[ex.first].chunkToCatMap )
          {
             // Actually creates the category
-            m_exCats[catNum][ex.first][chunk.first] = std::unique_ptr<Cat>( new Cat( m_path, catNum, catName, ex.first, chunk.first ) );
+            m_exCats[catNum].exNumToChunkMap[ex.first].chunkToCatMap[chunk.first] = std::unique_ptr<Cat>( new Cat( m_path, catNum, catName, ex.first, chunk.first ) );
          }
       }
    }
