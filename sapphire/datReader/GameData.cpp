@@ -15,9 +15,9 @@ namespace
 {
     // Relation between category number and category name
     // These names are taken straight from the exe, it helps resolve dispatching when getting files by path
-   static std::map<std::string, uint32_t> catNameToIdMap =
-   {
-        {"common",          0x00},
+
+    std::unordered_map< std::string, uint32_t > categoryNameToIdMap = 
+       {{"common",          0x00},
         {"bgcommon",        0x01},
         {"bg",              0x02},
         {"cut",             0x03},
@@ -32,22 +32,20 @@ namespace
         {"music",           0x0C}
    };
 
-   static std::map<uint32_t, std::string> catIdToNameMap =
-   {
-      {0x00, "common"     },
-      {0x01, "bgcommon"   },
-      {0x02, "bg",        },
-      {0x03, "cut"        },
-      {0x04, "chara"      },
-      {0x05, "shader"     },
-      {0x06, "ui",        },
-      {0x07, "sound",     },
-      {0x08, "vfx",       },
-      {0x09, "ui_script"  },
-      {0x0A, "exd",       },
-      {0x0B, "game_script"},
-      {0x0C, "music",     }
-   };
+    std::unordered_map< uint32_t, std::string > categoryIdToNameMap = 
+       {{0x00,              "common"},
+        {0x01,              "bgcommon"},
+        {0x02,              "bg"},
+        {0x03,              "cut"},
+        {0x04,              "chara"},
+        {0x05,              "shader"},
+        {0x06,              "ui"},
+        {0x07,              "sound"},
+        {0x08,              "vfx"},
+        {0x09,              "ui_script"},
+        {0x0A,              "exd"},
+        {0x0B,              "game_script"},
+        {0x0C,              "music"}};
 }
 
 namespace xiv
@@ -190,21 +188,21 @@ const Cat& GameData::getCategory(uint32_t catNum)
 const Cat& GameData::getCategory(const std::string& catName)
 {
    // Find the category number from the name
-   auto categoryMapIt = ::catNameToIdMap.find( catName );
-   if( categoryMapIt == ::catNameToIdMap.end() )
+   auto categoryNameToIdMapIt = ::categoryNameToIdMap.find( catName );
+   if( categoryNameToIdMapIt == ::categoryNameToIdMap.end() )
    {
       throw std::runtime_error( "Category not found: " + catName );
    }
 
    // From the category number return the category
-   return getCategory( categoryMapIt->second );
+   return getCategory( categoryNameToIdMapIt->second );
 }
 
 const Cat& GameData::getExCategory( const std::string& catName, uint32_t exNum, const std::string& path )
 {
    // Find the category number from the name
-   auto categoryMapIt = ::catNameToIdMap.find( catName );
-   if( categoryMapIt == ::catNameToIdMap.end() )
+   auto categoryMapIt = ::categoryNameToIdMap.find( catName );
+   if( categoryMapIt == ::categoryNameToIdMap.end() )
    {
       throw std::runtime_error( "Category not found: " + catName );
    }
@@ -278,8 +276,8 @@ void GameData::createCategory(uint32_t catNum)
    {
       // Get the category name if we have it
       std::string catName;
-      auto categoryMapIt = ::catIdToNameMap.find( catNum );
-      if( categoryMapIt != ::catIdToNameMap.end() )
+      auto categoryMapIt = ::categoryIdToNameMap.find( catNum );
+      if( categoryMapIt != ::categoryIdToNameMap.end() )
       {
          catName = categoryMapIt->second;
       }
@@ -296,8 +294,8 @@ void GameData::createExCategory( uint32_t catNum )
    {
       // Get the category name if we have it
       std::string catName;
-      auto categoryMapIt = ::catIdToNameMap.find( catNum );
-      if( categoryMapIt != ::catIdToNameMap.end() )
+      auto categoryMapIt = ::categoryIdToNameMap.find( catNum );
+      if( categoryMapIt != ::categoryIdToNameMap.end() )
       {
          catName = categoryMapIt->second;
       }

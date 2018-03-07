@@ -1,4 +1,9 @@
 file(REMOVE_RECURSE
+  "cotire/xivdat_CXX_prefix.hxx.gch"
+  "cotire/xivdat_CXX_prefix.hxx"
+  "cotire/xivdat_CXX_prefix.cxx"
+  "cotire/xivdat_CXX_prefix.cxx.log"
+  "cotire/xivdat_CXX_unity.cxx"
   "CMakeFiles/xivdat.dir/GameData.cpp.o"
   "CMakeFiles/xivdat.dir/crc32.cpp.o"
   "CMakeFiles/xivdat.dir/Exh.cpp.o"
