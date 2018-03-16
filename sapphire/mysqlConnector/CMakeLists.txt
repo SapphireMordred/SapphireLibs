@@ -9,10 +9,14 @@ set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} )
 
 add_library( mysqlConnector ${UTILS_PUBLIC_INCLUDE_FILES} ${UTILS_SOURCE_FILES} )
 target_include_directories( mysqlConnector PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
-if(UNIX)
+if (UNIX)
   target_include_directories( mysqlConnector PUBLIC "/usr/include/mysql/" )
   
 else()
   target_include_directories( mysqlConnector PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../../external/MySQL/" )
 endif()
-cotire(mysqlConnector)
+
+if(Cotire_ENABLED)
+	message( "Cotire enabled for sapphire_lobby" )
+	cotire( mysqlConnector )
+endif()
