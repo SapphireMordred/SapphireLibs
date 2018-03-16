@@ -18,6 +18,5 @@ endif()
 target_include_directories( xivdat PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
 
 if(Cotire_ENABLED)
-	message( "Cotire enabled for xivdat" )
 	cotire( xivdat )
 endif()

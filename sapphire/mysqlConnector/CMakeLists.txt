@@ -17,6 +17,5 @@ else()
 endif()
 
 if(Cotire_ENABLED)
-	message( "Cotire enabled for sapphire_lobby" )
 	cotire( mysqlConnector )
 endif()
