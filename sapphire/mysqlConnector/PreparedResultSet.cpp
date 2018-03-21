@@ -188,7 +188,7 @@ uint64_t Mysql::PreparedResultSet::getUInt64_intern( const uint32_t columnIndex,
       case DataType::SET:
       case DataType::ENUM:
       case DataType::JSON:
-         return strtoull( getString(columnIndex).c_str(), nullptr, 10 );
+         return Mysql::Util::strtoull( getString( columnIndex ).c_str(), nullptr );
       case DataType::BIT:
       {
          uint64_t uval = 0;
@@ -281,7 +281,7 @@ int64_t Mysql::PreparedResultSet::getInt64_intern( const uint32_t columnIndex, b
       case DataType::SET:
       case DataType::ENUM:
       case DataType::JSON:
-         return strtoll( getString( columnIndex ).c_str(), nullptr, 10 );
+         return Mysql::Util::strtoll( getString( columnIndex ).c_str(), nullptr );
       case DataType::BIT:
       {
          int64_t uval = 0;
