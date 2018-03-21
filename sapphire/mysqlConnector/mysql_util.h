@@ -58,10 +58,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #  endif
 #else
 # ifndef strtoll
-#  define strtoll(x, e, b) _strtoi64((x), (e), (b))
+#  define STRTOLL(x, e, b) _strtoi64((x), (e), (b))
 # endif
 # ifndef strtoull
-#  define strtoull(x, e, b) _strtoui64((x), (e), (b))
+#  define STRTOULL(x, e, b) _strtoui64((x), (e), (b))
 # endif
 #endif	//	_WIN32
 
