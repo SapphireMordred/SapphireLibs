@@ -16,7 +16,11 @@ long double Mysql::Util::strtold(const char *nptr, char **endptr)
    return ::strtod(nptr, endptr);
 #else
    # ifndef HAVE_FUNCTION_STRTOLD
-  return ::strtod(nptr, endptr);
+   // on linux, strtod would return a value that is 1 less than the input string
+   // for reasons when the number is in the 64bit range
+   return std::strtoull( nptr, endptr, 10 );
+
+   //return ::strtod(nptr, endptr);
 # else
 #  if defined(__hpux) && defined(_LONG_DOUBLE)
   union {

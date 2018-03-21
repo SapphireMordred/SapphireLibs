@@ -49,11 +49,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #ifndef _WIN32
 #  ifndef HAVE_FUNCTION_STRTOLL
-#    define strtoll(__a, __b, __c)  static_cast<long long>(Util::strtold((__a), NULL))
+#    define STRTOLL(__a, __b, __c)  static_cast<long long>(Util::strtold((__a), NULL))
 #    define HAVE_FUNCTION_STRTOLL 1
 #  endif
 #  ifndef HAVE_FUNCTION_STRTOULL
-#    define strtoull(__a, __b, __c)  static_cast<unsigned long long>(Util::strtold((__a), NULL))
+#    define STRTOULL(__a, __b, __c)  static_cast<unsigned long long>(Util::strtold((__a), NULL))
 #    define HAVE_FUNCTION_STRTOULL 1
 #  endif
 #else
