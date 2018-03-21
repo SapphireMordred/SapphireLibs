@@ -37,6 +37,17 @@ long double Mysql::Util::strtold(const char *nptr, char **endptr)
 
 }
 
+int64_t Mysql::Util::strtoll( const char* nptr, char** endptr )
+{
+   return static_cast< int64_t >( strtold( nptr, endptr ) );
+}
+
+
+uint64_t Mysql::Util::strtoull( const char* nptr, char** endptr )
+{
+   return static_cast< uint64_t >( strtold( nptr, endptr ) );
+}
+
 long double Mysql::Util::strtonum( const std::string &str, int radix )
 {
    using iter_t = std::istreambuf_iterator< char >;

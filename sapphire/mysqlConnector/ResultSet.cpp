@@ -136,8 +136,8 @@ int64_t Mysql::ResultSet::getInt64( uint32_t columnIndex ) const
    }
 
    if( getFieldMeta( columnIndex)->flags & UNSIGNED_FLAG )
-      return STRTOULL( m_row[columnIndex - 1], nullptr, 10 );
-   return STRTOULL( m_row[columnIndex - 1], nullptr, 10 );
+      return Mysql::Util::strtoull( m_row[columnIndex - 1], nullptr );
+   return Mysql::Util::strtoull( m_row[columnIndex - 1], nullptr );
 }
 
 int64_t Mysql::ResultSet::getInt64( const std::string &columnLabel ) const
