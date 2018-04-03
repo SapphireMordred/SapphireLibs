@@ -16,4 +16,7 @@ else()
     target_link_libraries( xivdat PUBLIC zlib1 )
 endif()
 target_include_directories( xivdat PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} )
-cotire( xivdat )
+
+if(Cotire_ENABLED)
+	cotire( xivdat )
+endif()
