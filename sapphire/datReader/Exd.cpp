@@ -160,7 +160,7 @@ namespace xiv
                auto type = static_cast< uint16_t >( member_entry.type );
                if( type < 0x19 || type > 0x20 )
                   throw std::runtime_error("Unknown DataType: " + std::to_string( type ));
-               int32_t val = extract< bool >( stream, "bool" );
+               uint64_t val = extract< uint64_t >( stream, "bool" );
                int32_t shift = type - 0x19;
                int32_t i = 1 << shift;
                val &= i;
@@ -262,7 +262,7 @@ namespace xiv
                      auto type = static_cast< uint16_t >( member_entry.type );
                      if( type < 0x19 || type > 0x20 )
                         throw std::runtime_error("Unknown DataType: " + std::to_string( type ));
-                     int32_t val = extract< bool >( stream, "bool" );
+                     uint64_t val = extract< uint64_t >( stream, "bool" );
                      int32_t shift = type - 0x19;
                      int32_t i = 1 << shift;
                      val &= i;
