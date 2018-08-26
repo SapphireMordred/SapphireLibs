@@ -49,53 +49,53 @@ namespace Mysql
 
          void close();
 
-         uint32_t findColumn( const std::string& columnLabel ) const;
+         uint32_t findColumn( const std::string& columnLabel ) const override;
 
-         std::istream * getBlob( uint32_t columnIndex ) const;
-         std::istream * getBlob( const std::string& columnLabel ) const;
+         std::istream * getBlob( uint32_t columnIndex ) const override;
+         std::istream * getBlob( const std::string& columnLabel ) const override;
 
-         std::vector< char > getBlobVector( uint32_t columnIndex ) const;
-         std::vector< char > getBlobVector( const std::string& columnLabel ) const;
+         std::vector< char > getBlobVector( uint32_t columnIndex ) const override;
+         std::vector< char > getBlobVector( const std::string& columnLabel ) const override;
 
-         bool getBoolean( uint32_t columnIndex ) const;
-         bool getBoolean( const std::string& columnLabel ) const;
+         bool getBoolean( uint32_t columnIndex ) const override;
+         bool getBoolean( const std::string& columnLabel ) const override;
 
-         long double getDouble( uint32_t columnIndex ) const;
-         long double getDouble( const std::string& columnLabel ) const;
+         long double getDouble( uint32_t columnIndex ) const override;
+         long double getDouble( const std::string& columnLabel ) const override;
 
-         float getFloat( uint32_t columnIndex ) const;
-         float getFloat( const std::string& columnLabel ) const;
+         float getFloat( uint32_t columnIndex ) const override;
+         float getFloat( const std::string& columnLabel ) const override;
 
-         int32_t getInt( uint32_t columnIndex ) const;
-         int32_t getInt( const std::string& columnLabel ) const;
+         int32_t getInt( uint32_t columnIndex ) const override;
+         int32_t getInt( const std::string& columnLabel ) const override;
 
-         int16_t getInt16( uint32_t columnIndex ) const;
-         int16_t getInt16( const std::string& columnLabel ) const;
+         int16_t getInt16( uint32_t columnIndex ) const override;
+         int16_t getInt16( const std::string& columnLabel ) const override;
 
          int8_t getInt8( uint32_t columnIndex ) const;
          int8_t getInt8( const std::string& columnLabel ) const;
 
-         uint32_t getUInt( uint32_t columnIndex ) const;
-         uint32_t getUInt( const std::string& columnLabel ) const;
+         uint32_t getUInt( uint32_t columnIndex ) const override;
+         uint32_t getUInt( const std::string& columnLabel ) const override;
 
          uint8_t getUInt8( uint32_t columnIndex ) const;
          uint8_t getUInt8( const std::string& columnLabel ) const;
 
-         uint16_t getUInt16( uint32_t columnIndex ) const;
-         uint16_t getUInt16( const std::string& columnLabel ) const;
+         uint16_t getUInt16( uint32_t columnIndex ) const override;
+         uint16_t getUInt16( const std::string& columnLabel ) const override;
 
-         int64_t getInt64( uint32_t columnIndex ) const;
-         int64_t getInt64( const std::string& columnLabel ) const;
+         int64_t getInt64( uint32_t columnIndex ) const override;
+         int64_t getInt64( const std::string& columnLabel ) const override;
 
-         uint64_t getUInt64( uint32_t columnIndex ) const;
-         uint64_t getUInt64( const std::string& columnLabel ) const;
+         uint64_t getUInt64( uint32_t columnIndex ) const override;
+         uint64_t getUInt64( const std::string& columnLabel ) const override;
 
-         size_t getRow() const;
+         size_t getRow() const override;
 
-         const boost::shared_ptr< Statement > getStatement() const;
+         const boost::shared_ptr< Statement > getStatement() const override;
 
-         std::string getString( uint32_t columnIndex ) const;
-         std::string getString( const std::string& columnLabel ) const;
+         std::string getString( uint32_t columnIndex ) const override;
+         std::string getString( const std::string& columnLabel ) const override;
 
          void getWarnings();
 
@@ -103,15 +103,15 @@ namespace Mysql
 
          void insertRow();
 
-         bool isFirst() const;
+         bool isFirst() const override;
 
-         bool isLast() const;
+         bool isLast() const override;
 
-         bool isNull( uint32_t columnIndex ) const;
+         bool isNull( uint32_t columnIndex ) const override;
 
-         bool isNull( const std::string& columnLabel ) const;
+         bool isNull( const std::string& columnLabel ) const override;
 
-         bool next();
+         bool next() override;
 
          size_t rowsCount() const;
 

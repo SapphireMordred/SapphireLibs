@@ -49,14 +49,14 @@ namespace Mysql
          void clearParameters();
 
          bool execute();
-         bool execute( const std::string& sql );
+         bool execute( const std::string& sql ) override;
 
          boost::shared_ptr< ResultSet > executeQuery();
-         boost::shared_ptr< ResultSet > executeQuery( const std::string& sql );
+         boost::shared_ptr< ResultSet > executeQuery( const std::string& sql ) override;
 
          bool getMoreResults();
 
-         boost::shared_ptr< ResultSet > getResultSet();
+         boost::shared_ptr< ResultSet > getResultSet() override;
 
          void setBlob( uint32_t parameterIndex, std::istream * blob );
 
