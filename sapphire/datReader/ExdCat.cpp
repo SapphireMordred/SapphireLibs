@@ -78,22 +78,5 @@ namespace xiv
          return *(ln_it->second);
       }
 
-      void Cat::export_as_csvs(const std::experimental::filesystem::path& i_output_path) const
-      {
-         for (auto language: get_header().get_languages())
-         {
-            if (language != Language::chs)
-            {
-               auto output_file_path = i_output_path / (_name + language_map.at(language) + ".txt");
-
-	       std::experimental::filesystem::create_directories(output_file_path.parent_path());
-
-               std::ofstream ofs(output_file_path.string());
-               get_data_ln(language).get_as_csv(ofs);
-               ofs.close();
-            }
-         }
-      }
-
    }
 }

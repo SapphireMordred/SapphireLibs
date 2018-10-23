@@ -22,9 +22,9 @@ class LongDataSender : public boost::static_visitor< bool >
 
 public:
 
-   LongDataSender( MYSQL_STMT* pStmt, unsigned int i )
-           : position( i )
-           , m_pStmt( pStmt )
+   LongDataSender( MYSQL_STMT* pStmt, unsigned int i ) :
+     position( i ),
+     m_pStmt( pStmt )
    {
    }
 
@@ -56,11 +56,11 @@ public:
                case CR_OUT_OF_MEMORY:
                   throw std::bad_alloc();
                case CR_INVALID_BUFFER_USE:
-                  throw std::runtime_error("PreparedStatement::setBlob: can't set blob value on that column");
+                  throw std::runtime_error( "PreparedStatement::setBlob: can't set blob value on that column" );
                case CR_SERVER_GONE_ERROR:
                case CR_COMMANDS_OUT_OF_SYNC:
                default:
-                  throw std::runtime_error("PreparedStatement:: Default error");
+                  throw std::runtime_error( "PreparedStatement:: Default error" );
             }
          }
       } while( true );

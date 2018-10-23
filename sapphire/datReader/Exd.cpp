@@ -1,8 +1,5 @@
 #include "Exd.h"
 
-#include <boost/bind.hpp>
-#include <boost/io/ios_state.hpp>
-
 #include "bparse.h"
 #include "stream.h"
 
@@ -273,65 +270,6 @@ namespace xiv
             }
          }
          return _data;
-      }
-
-      class output_field : public boost::static_visitor<>
-      {
-      public:
-         template <typename T>
-         void operator()( T operand, std::ostream& o_stream, char i_delimiter ) const
-         {
-            o_stream << i_delimiter << operand;
-         }
-
-         void operator()( int8_t operand, std::ostream& o_stream, char i_delimiter ) const
-         {
-            o_stream << i_delimiter << static_cast< int16_t >( operand );
-         }
-
-         void operator()( uint8_t operand, std::ostream& o_stream, char i_delimiter ) const
-         {
-            o_stream << i_delimiter << static_cast< uint16_t >( operand );
-         }
-
-         void operator()( const std::string& operand, std::ostream& o_stream, char i_delimiter ) const
-         {
-            o_stream << i_delimiter;
-            for( char c : operand )
-            {
-               if( isprint( static_cast< int32_t >( static_cast< uint8_t >( c ) ) ) )
-               {
-                  o_stream << c;
-               }
-               else
-               {
-                  // This saves the flags of the stream for a given scope, to be sure that manipulators are reset after the return
-                  boost::io::ios_all_saver ias( o_stream );
-                  o_stream << "\\x" << std::setw( 2 ) << std::setfill( '0' ) << std::hex << static_cast< uint16_t >( static_cast< uint8_t >( c ) );
-               }
-            }
-         }
-      };
-
-      // Get as csv
-      void Exd::get_as_csv( std::ostream& o_stream ) const
-      {
-         // tab delimited csv to avoid problems with commas in strings
-         char delimiter = '\t';
-
-         auto visitor = boost::bind( output_field(), _1, boost::ref( o_stream ), delimiter );
-
-         for( auto& row_entry : _data )
-         {
-            o_stream << row_entry.first;
-
-            for( auto& field : row_entry.second )
-            {
-               boost::apply_visitor( visitor, field );
-            }
-
-            o_stream << '\n';
-         }
       }
 
    }

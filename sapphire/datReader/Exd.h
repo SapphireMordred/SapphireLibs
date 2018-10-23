@@ -4,7 +4,7 @@
 #include <memory>
 #include <map>
 
-#include <boost/variant.hpp>
+#include <variant>
 
 #include "File.h"
 
@@ -16,7 +16,7 @@ namespace exd
 class Exh;
 
 // Field type containing all the possible types in the data files
-using Field = boost::variant<
+using Field = std::variant<
     std::string,
     bool,
     int8_t,
@@ -49,9 +49,6 @@ public:
 
     // Get all rows
     const std::map<uint32_t, std::vector<Field>>& get_rows();
-
-    // Get as csv
-    void get_as_csv(std::ostream& o_stream) const;
 
 protected:
     // Data indexed by the ID of the row, the vector is field with the same order as exh.members

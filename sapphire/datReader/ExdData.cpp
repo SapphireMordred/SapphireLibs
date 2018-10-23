@@ -95,15 +95,5 @@ void ExdData::create_category(const std::string& i_cat_name)
     }
 }
 
-void ExdData::export_as_csvs(const std::experimental::filesystem::path& i_output_path)
-{
-    auto csv_output_path = i_output_path / "csv";
-
-    for (auto& cat_name: get_cat_names())
-    {
-        get_category(cat_name).export_as_csvs(csv_output_path);
-    }
-}
-
 }
 }
