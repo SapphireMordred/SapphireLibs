@@ -42,8 +42,8 @@ uint32_t Mysql::PreparedResultSet::findColumn( const std::string &columnLabel ) 
    return iter->second + 1;
 }
 
-Mysql::PreparedResultSet::PreparedResultSet( boost::shared_ptr< ResultBind >& pBind,
-                                             boost::shared_ptr< Mysql::PreparedStatement > par ) :
+Mysql::PreparedResultSet::PreparedResultSet( std::shared_ptr< ResultBind >& pBind,
+                                             std::shared_ptr< Mysql::PreparedStatement > par ) :
    ResultSet( nullptr, par ),
    m_pResultBind( pBind ),
    m_pStmt( par )
@@ -592,7 +592,7 @@ size_t Mysql::PreparedResultSet::rowsCount() const
    return static_cast< uint32_t >( m_numRows );
 }
 
-const boost::shared_ptr< Mysql::Statement > Mysql::PreparedResultSet::getStatement() const
+const std::shared_ptr< Mysql::Statement > Mysql::PreparedResultSet::getStatement() const
 {
    return m_pStmt;
 }
@@ -615,7 +615,7 @@ std::vector< char > Mysql::PreparedResultSet::getBlobVector( uint32_t columnInde
    if( columnIndex == 0 || columnIndex > m_numFields )
       throw std::runtime_error( "PreparedResultSet::getBlobVector: invalid value of 'columnIndex'" );
 
-   boost::scoped_ptr< std::istream > inStr( getBlob( columnIndex ) );
+   std::unique_ptr< std::istream > inStr( getBlob( columnIndex ) );
    char buff[4196];
    std::vector< char > data;
    inStr->read( buff, sizeof( buff ) );

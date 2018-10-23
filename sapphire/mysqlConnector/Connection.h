@@ -1,9 +1,7 @@
 #ifndef SAPPHIRE_CONNECTION_H
 #define SAPPHIRE_CONNECTION_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
+#include <memory>
 #include <mysql.h>
 #include <map>
 
@@ -15,16 +13,16 @@ namespace Mysql
    class Statement;
    class PreparedStatement;
 
-   class Connection : public boost::enable_shared_from_this< Connection >
+   class Connection : public std::enable_shared_from_this< Connection >
    {
    public:
-      Connection( boost::shared_ptr< MySqlBase > pBase,
+      Connection( std::shared_ptr< MySqlBase > pBase,
                   const std::string& hostName,
                   const std::string& userName,
                   const std::string& password,
                   uint16_t port = 3306);
 
-      Connection( boost::shared_ptr< MySqlBase > pBase,
+      Connection( std::shared_ptr< MySqlBase > pBase,
                   const std::string& hostName,
                   const std::string& userName,
                   const std::string& password,
@@ -42,7 +40,7 @@ namespace Mysql
       void setOption( enum mysql_option option, uint32_t arg );
       void setOption( enum mysql_option option, const std::string& arg );
 
-      boost::shared_ptr< MySqlBase > getMySqlBase() const;
+      std::shared_ptr< MySqlBase > getMySqlBase() const;
 
       void setAutoCommit( bool autoCommit );
       bool getAutoCommit();
@@ -51,7 +49,7 @@ namespace Mysql
 
       void setSchema( const std::string& catalog );
 
-      boost::shared_ptr< Statement > createStatement();
+      std::shared_ptr< Statement > createStatement();
 
       void beginTransaction();
       void commitTransaction();
@@ -69,14 +67,14 @@ namespace Mysql
 
       bool reconnect();
 
-      boost::shared_ptr< Mysql::PreparedStatement > prepareStatement( const std::string& sql );
+      std::shared_ptr< Mysql::PreparedStatement > prepareStatement( const std::string& sql );
       
       std::string getLastStatementInfo();
 
       MYSQL* getRawCon();
 
    private:
-      boost::shared_ptr< MySqlBase > m_pBase;
+      std::shared_ptr< MySqlBase > m_pBase;
       MYSQL* m_pRawCon;
       bool m_bConnected;
 

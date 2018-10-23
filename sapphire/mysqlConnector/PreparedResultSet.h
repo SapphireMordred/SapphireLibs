@@ -1,8 +1,7 @@
 #ifndef SAPPHIRE_PREPAREDRESULTSET_H
 #define SAPPHIRE_PREPAREDRESULTSET_H
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "ResultSet.h"
 
 namespace Mysql
@@ -23,11 +22,11 @@ namespace Mysql
 
          FieldNameIndexMap m_fieldNameToIndex;
 
-         boost::shared_ptr< PreparedStatement > m_pStmt;
+         std::shared_ptr< PreparedStatement > m_pStmt;
 
          bool is_valid;
 
-         boost::shared_ptr< ResultBind > m_pResultBind;
+         std::shared_ptr< ResultBind > m_pResultBind;
 
       protected:
          void checkValid() const;
@@ -39,7 +38,7 @@ namespace Mysql
          uint64_t getUInt64_intern( const uint32_t columnIndex, bool cutTooBig ) const;
 
       public:
-         PreparedResultSet( boost::shared_ptr< ResultBind >& pBind, boost::shared_ptr< PreparedStatement > par );
+         PreparedResultSet( std::shared_ptr< ResultBind >& pBind, std::shared_ptr< PreparedStatement > par );
 
          ~PreparedResultSet() override;
 
@@ -92,7 +91,7 @@ namespace Mysql
 
          size_t getRow() const override;
 
-         const boost::shared_ptr< Statement > getStatement() const override;
+         const std::shared_ptr< Statement > getStatement() const override;
 
          std::string getString( uint32_t columnIndex ) const override;
          std::string getString( const std::string& columnLabel ) const override;

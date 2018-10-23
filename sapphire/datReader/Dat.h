@@ -5,7 +5,7 @@
 
 #include <mutex>
 
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 
 namespace xiv
 {
@@ -18,7 +18,7 @@ class Dat : public SqPack
 {
 public:
    // Full path to the dat file
-   Dat( const boost::filesystem::path& i_path, uint32_t i_nb );
+   Dat( const std::experimental::filesystem::path& i_path, uint32_t i_nb );
    virtual ~Dat();
 
    // Retrieves a file given the offset in the dat file

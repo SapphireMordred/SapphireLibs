@@ -5,10 +5,9 @@
 #include <cctype>
 #include <clocale>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 #include <string.h>
 
-Mysql::ResultSet::ResultSet( MYSQL_RES* res, boost::shared_ptr< Mysql::Statement > par )
+Mysql::ResultSet::ResultSet( MYSQL_RES* res, std::shared_ptr< Mysql::Statement > par )
 {
    if( !res )
       return;
@@ -94,7 +93,7 @@ size_t Mysql::ResultSet::rowsCount() const
    return static_cast< uint32_t >( m_numRows );
 }
 
-const boost::shared_ptr< Mysql::Statement > Mysql::ResultSet::getStatement() const
+const std::shared_ptr< Mysql::Statement > Mysql::ResultSet::getStatement() const
 {
    return m_pStmt;
 }
@@ -310,7 +309,7 @@ std::vector< char > Mysql::ResultSet::getBlobVector( uint32_t columnIndex ) cons
    if( columnIndex == 0 || columnIndex > m_numFields )
       throw std::runtime_error( "ResultSet::getBlobVector: invalid value of 'columnIndex'" );
 
-   boost::scoped_ptr< std::istream > inStr( getBlob( columnIndex ) );
+   std::unique_ptr< std::istream > inStr( getBlob( columnIndex ) );
    char buff[4196];
    std::vector< char > data;
    inStr->read( buff, sizeof( buff ) );

@@ -6,8 +6,6 @@
 #include <sstream>
 #include <vector>
 
-#include <boost/io/ios_state.hpp>
-
 namespace xiv
 {
 namespace utils
@@ -97,34 +95,6 @@ void extract(std::istream& i_stream, const std::string& i_name, uint32_t i_size,
 
 // For cstrings
 std::string extract_cstring( std::istream& i_stream, const std::string& i_name );
-
-
-// Control the output of all types, default do the default <<
-template <typename Type>
-inline std::ostream& output(std::ostream& o_stream, Type& io_value)
-{
-   return o_stream << io_value;
-}
-
-// for char output the char if printable, else just \xXX's it
-inline std::ostream& output(std::ostream& o_stream, char c)
-{
-   if( isprint( c ) )
-   {
-      return o_stream << c;
-   }
-   else
-   {
-      // This saves the flags of the stream for a given scope, to be sure that manipulators are reset after the return
-      boost::io::ios_all_saver ias( o_stream );
-      return o_stream << "\\x" << std::setw( 2 ) << std::setfill( '0' ) << std::hex << static_cast<int>( c );
-   }
-}
-
-inline std::ostream& output(std::ostream& o_stream, uint8_t c)
-{
-   return o_stream << static_cast<uint16_t>( c );
-}
 
 }
 }

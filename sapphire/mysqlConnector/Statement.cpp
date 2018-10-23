@@ -2,14 +2,13 @@
 #include "Connection.h"
 #include "ResultSet.h"
 #include "mysql_util.h"
-#include <boost/make_shared.hpp>
 
-boost::shared_ptr< Mysql::Connection > Mysql::Statement::getConnection()
+std::shared_ptr< Mysql::Connection > Mysql::Statement::getConnection()
 {
    return m_pConnection;
 }
 
-Mysql::Statement::Statement( boost::shared_ptr< Mysql::Connection > conn ) :
+Mysql::Statement::Statement( std::shared_ptr< Mysql::Connection > conn ) :
    m_pConnection( conn )
 {
 
@@ -48,20 +47,20 @@ uint32_t Mysql::Statement::errNo()
    return mysql_errno( m_pConnection->getRawCon() );
 }
 
-boost::shared_ptr< Mysql::ResultSet > Mysql::Statement::executeQuery( const std::string &sql )
+std::shared_ptr< Mysql::ResultSet > Mysql::Statement::executeQuery( const std::string &sql )
 {
    m_lastUpdateCount = UL64(~0);
    doQuery( sql );
 
-   return boost::make_shared< ResultSet >( mysql_store_result( m_pConnection->getRawCon() ), shared_from_this() );
+   return std::make_shared< ResultSet >( mysql_store_result( m_pConnection->getRawCon() ), shared_from_this() );
 }
 
-boost::shared_ptr< Mysql::ResultSet > Mysql::Statement::getResultSet()
+std::shared_ptr< Mysql::ResultSet > Mysql::Statement::getResultSet()
 {
    if( errNo() != 0 )
       throw std::runtime_error( "Error during getResultSet() : " + std::to_string( errNo() ) + ": " +
                                         m_pConnection->getError() );
 
-   return boost::make_shared< ResultSet >( mysql_store_result( m_pConnection->getRawCon() ), shared_from_this() );
+   return std::make_shared< ResultSet >( mysql_store_result( m_pConnection->getRawCon() ), shared_from_this() );
 }
 

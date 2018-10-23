@@ -3,7 +3,6 @@
 #include "Connection.h"
 #include "ResultBind.h"
 #include <boost/variant.hpp>
-#include <boost/scoped_array.hpp>
 #include <errmsg.h>
 #include <string.h>
 
@@ -35,7 +34,7 @@ public:
          return false;
 
       //char buf[MAX_SEND_LONGDATA_BUFFER];
-      boost::scoped_array< char > buf( new char[MAX_SEND_LONGDATA_BUFFER] );
+      std::unique_ptr< char[] > buf( new char[MAX_SEND_LONGDATA_BUFFER] );
 
       do
       {
@@ -168,9 +167,9 @@ public:
 private:
 
    unsigned int m_paramCount;
-   boost::scoped_array< MYSQL_BIND > bind;
-   boost::scoped_array< bool > value_set;
-   boost::scoped_array< bool > delete_blob_after_execute;
+   std::unique_ptr< MYSQL_BIND[] > bind;
+   std::unique_ptr< bool[] > value_set;
+   std::unique_ptr< bool[] > delete_blob_after_execute;
 
    typedef std::map< uint32_t, Blob_t > Blobs;
 
@@ -309,7 +308,7 @@ public:
 
 }
 
-Mysql::PreparedStatement::PreparedStatement( MYSQL_STMT* pStmt, boost::shared_ptr< Mysql::Connection > pConn )
+Mysql::PreparedStatement::PreparedStatement( MYSQL_STMT* pStmt, std::shared_ptr< Mysql::Connection > pConn )
         : Statement( pConn )
 {
    m_pStmt = pStmt;
@@ -324,7 +323,7 @@ uint32_t Mysql::PreparedStatement::errNo()
    return mysql_stmt_errno( m_pStmt );
 }
 
-boost::shared_ptr< Mysql::Connection > Mysql::PreparedStatement::getConnection()
+std::shared_ptr< Mysql::Connection > Mysql::PreparedStatement::getConnection()
 {
    return m_pConnection;
 }
@@ -400,30 +399,30 @@ bool Mysql::PreparedStatement::execute( const std::string &sql )
    return false;
 }
 
-boost::shared_ptr< Mysql::ResultSet > Mysql::PreparedStatement::executeQuery( const std::string &sql )
+std::shared_ptr< Mysql::ResultSet > Mysql::PreparedStatement::executeQuery( const std::string &sql )
 {
    // not to be implemented for prepared statements
    return nullptr;
 }
 
-boost::shared_ptr< Mysql::ResultSet > Mysql::PreparedStatement::executeQuery()
+std::shared_ptr< Mysql::ResultSet > Mysql::PreparedStatement::executeQuery()
 {
    doQuery();
 
    my_bool bool_tmp = 1;
    mysql_stmt_attr_set( m_pStmt, STMT_ATTR_UPDATE_MAX_LENGTH, &bool_tmp );
 
-   boost::shared_ptr< ResultSet > tmp( new PreparedResultSet( m_pResultBind, boost::static_pointer_cast< PreparedStatement >( shared_from_this() ) ) );
+   std::shared_ptr< ResultSet > tmp( new PreparedResultSet( m_pResultBind, std::static_pointer_cast< PreparedStatement >( shared_from_this() ) ) );
 
    return tmp;
 }
 
-boost::shared_ptr< Mysql::ResultSet > Mysql::PreparedStatement::getResultSet()
+std::shared_ptr< Mysql::ResultSet > Mysql::PreparedStatement::getResultSet()
 {
    my_bool bool_tmp = 1;
    mysql_stmt_attr_set( m_pStmt, STMT_ATTR_UPDATE_MAX_LENGTH, &bool_tmp );
 
-   boost::shared_ptr< ResultSet > tmp( new PreparedResultSet( m_pResultBind, boost::static_pointer_cast< PreparedStatement >( shared_from_this() ) ) );
+   std::shared_ptr< ResultSet > tmp( new PreparedResultSet( m_pResultBind, std::static_pointer_cast< PreparedStatement >( shared_from_this() ) ) );
 
    return tmp;
 }

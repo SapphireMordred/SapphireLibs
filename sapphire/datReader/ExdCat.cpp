@@ -2,8 +2,6 @@
 
 #include <fstream>
 
-#include <boost/assign/list_of.hpp>
-
 #include "GameData.h"
 
 #include "Exh.h"
@@ -12,13 +10,13 @@
 namespace
 {
    // Suffix of the filenames given a language
-   std::map<xiv::exd::Language, std::string> language_map = boost::assign::map_list_of
-      (xiv::exd::Language::none, "")
-      (xiv::exd::Language::ja, "_ja")
-      (xiv::exd::Language::en, "_en")
-      (xiv::exd::Language::de, "_de")
-      (xiv::exd::Language::fr, "_fr")
-      (xiv::exd::Language::chs, "_chs");
+   std::map<xiv::exd::Language, std::string> language_map = 
+   {{xiv::exd::Language::none, ""},
+      {xiv::exd::Language::ja, "_ja"},
+      {xiv::exd::Language::en, "_en"},
+      {xiv::exd::Language::de, "_de"},
+      {xiv::exd::Language::fr, "_fr"},
+      {xiv::exd::Language::chs, "_chs"}};
 }
 
 namespace xiv
@@ -80,7 +78,7 @@ namespace xiv
          return *(ln_it->second);
       }
 
-      void Cat::export_as_csvs(const boost::filesystem::path& i_output_path) const
+      void Cat::export_as_csvs(const std::experimental::filesystem::path& i_output_path) const
       {
          for (auto language: get_header().get_languages())
          {
@@ -88,7 +86,7 @@ namespace xiv
             {
                auto output_file_path = i_output_path / (_name + language_map.at(language) + ".txt");
 
-               boost::filesystem::create_directories(output_file_path.parent_path());
+	       std::experimental::filesystem::create_directories(output_file_path.parent_path());
 
                std::ofstream ofs(output_file_path.string());
                get_data_ln(language).get_as_csv(ofs);

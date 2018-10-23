@@ -1,13 +1,11 @@
 #ifndef SAPPHIRE_RESULTSET_H
 #define SAPPHIRE_RESULTSET_H
 
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <vector>
 
 #include "ResultSetBase.h"
 #include <mysql.h>
+#include <memory>
 
 namespace Mysql
 {
@@ -29,7 +27,7 @@ namespace Mysql
 
          mutable uint32_t m_lastQueriedColumn;
 
-         boost::shared_ptr< Statement > m_pStmt;
+         std::shared_ptr< Statement > m_pStmt;
 
          MYSQL_RES* m_pRes;
 
@@ -37,7 +35,7 @@ namespace Mysql
          MYSQL_FIELD* getFieldMeta( unsigned int columnIndex ) const;
 
       public:
-         ResultSet( MYSQL_RES* res, boost::shared_ptr< Statement > par );
+         ResultSet( MYSQL_RES* res, std::shared_ptr< Statement > par );
 
          virtual ~ResultSet();
 
@@ -80,7 +78,7 @@ namespace Mysql
 
          virtual size_t getRow() const;
 
-         virtual const boost::shared_ptr< Statement > getStatement() const;
+         virtual const std::shared_ptr< Statement > getStatement() const;
 
          virtual std::string getString( uint32_t columnIndex ) const;
          virtual std::string getString( const std::string& columnLabel ) const;

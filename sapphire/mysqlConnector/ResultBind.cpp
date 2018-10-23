@@ -5,8 +5,6 @@
 
 #include <string.h>
 
-#include <boost/scoped_ptr.hpp>
-
 namespace Mysql
 {
       struct st_buffer_size_type

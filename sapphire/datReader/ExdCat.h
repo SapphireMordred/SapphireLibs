@@ -4,7 +4,7 @@
 #include <memory>
 #include <map>
 
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 
 #include "bparse.h"
 #include "Exd.h"
@@ -52,7 +52,7 @@ namespace xiv
          const Exd& get_data_ln( Language i_language = Language::none ) const;
 
          // Export in csv in base flder i_ouput_path
-         void export_as_csvs( const boost::filesystem::path& i_output_path ) const;
+         void export_as_csvs( const std::experimental::filesystem::path& i_output_path ) const;
 
       protected:
          const std::string _name;

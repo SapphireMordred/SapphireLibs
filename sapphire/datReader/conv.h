@@ -5,16 +5,11 @@
 #include <vector>
 #include <ostream>
 
-namespace xiv
-{
-namespace utils
-{
-namespace conv
-{
-    float half2float(const uint16_t i_value);
-    float ubyte2float(const uint8_t i_value);
-
-	void bin2base64(const std::vector<char>& i_data, std::ostream& o_stream);
+namespace xiv {
+namespace utils {
+namespace conv {
+  float half2float( const uint16_t i_value );
+  float ubyte2float( const uint8_t i_value );
 }
 }
 }

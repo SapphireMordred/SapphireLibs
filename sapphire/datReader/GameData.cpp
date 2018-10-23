@@ -53,20 +53,20 @@ namespace xiv
 namespace dat
 {
 
-GameData::GameData(const boost::filesystem::path& path) try :
+GameData::GameData(const std::experimental::filesystem::path& path) try :
     m_path(path)
 {
    int maxExLevel = 0;
    
    // Determine which expansions are available
-   while( boost::filesystem::exists( boost::filesystem::path( m_path.string() + "\\ex" + std::to_string( maxExLevel + 1) + "\\ex" + std::to_string( maxExLevel + 1) + ".ver" ) ) )
+   while( std::experimental::filesystem::exists( std::experimental::filesystem::path( m_path.string() + "\\ex" + std::to_string( maxExLevel + 1) + "\\ex" + std::to_string( maxExLevel + 1) + ".ver" ) ) )
    {
       maxExLevel++;
    }
    
 
    // Iterate over the files in path
-   for( auto it = boost::filesystem::directory_iterator( m_path.string() + "//ffxiv" ); it != boost::filesystem::directory_iterator(); ++it )
+   for( auto it = std::experimental::filesystem::directory_iterator( m_path.string() + "//ffxiv" ); it != std::experimental::filesystem::directory_iterator(); ++it )
    {
       // Get the filename of the current element
       auto filename = it->path().filename().string();
@@ -92,14 +92,14 @@ GameData::GameData(const boost::filesystem::path& path) try :
          {
             const std::string path = m_path.string() + "\\" + buildDatStr( "ex" + std::to_string( exNum ), cat_nb, exNum, 0, "win32", "index" );
 
-            if( boost::filesystem::exists( boost::filesystem::path( path ) ) )
+            if( std::experimental::filesystem::exists( std::experimental::filesystem::path( path ) ) )
             {
 
                int chunkCount = 0;
 
                for(int chunkTest = 0; chunkTest < 256; chunkTest++ )
                {
-                  if( boost::filesystem::exists( m_path.string() + "\\" + buildDatStr( "ex" + std::to_string( exNum ), cat_nb, exNum, chunkTest, "win32", "index" ) ) )
+                  if( std::experimental::filesystem::exists( m_path.string() + "\\" + buildDatStr( "ex" + std::to_string( exNum ), cat_nb, exNum, chunkTest, "win32", "index" ) ) )
                   {
                      m_exCats[cat_nb].exNumToChunkMap[exNum].chunkToCatMap[chunkTest] = std::unique_ptr<Cat>();
                      chunkCount++;

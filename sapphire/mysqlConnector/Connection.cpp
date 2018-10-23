@@ -4,10 +4,8 @@
 #include "PreparedStatement.h"
 
 #include <vector>
-#include <boost/scoped_array.hpp>
-#include <boost/make_shared.hpp>
 
-Mysql::Connection::Connection( boost::shared_ptr< MySqlBase > pBase,
+Mysql::Connection::Connection( std::shared_ptr< MySqlBase > pBase,
                                const std::string& hostName, 
                                const std::string& userName,
                                const std::string& password,
@@ -23,7 +21,7 @@ Mysql::Connection::Connection( boost::shared_ptr< MySqlBase > pBase,
 
 }
 
-Mysql::Connection::Connection( boost::shared_ptr< MySqlBase > pBase,
+Mysql::Connection::Connection( std::shared_ptr< MySqlBase > pBase,
                                const std::string& hostName,
                                const std::string& userName,
                                const std::string& password,
@@ -149,7 +147,7 @@ bool Mysql::Connection::isClosed() const
    return !m_bConnected;
 }
 
-boost::shared_ptr< Mysql::MySqlBase > Mysql::Connection::getMySqlBase() const
+std::shared_ptr< Mysql::MySqlBase > Mysql::Connection::getMySqlBase() const
 {
    return m_pBase;
 }
@@ -198,7 +196,7 @@ void Mysql::Connection::rollbackTransaction()
 
 std::string Mysql::Connection::escapeString( const std::string &inData )
 {
-   boost::scoped_array< char > buffer( new char[inData.length() * 2 + 1] );
+   std::unique_ptr< char[] > buffer( new char[inData.length() * 2 + 1] );
    if( !buffer.get() )
       return "";
    unsigned long return_len = mysql_real_escape_string( m_pRawCon, buffer.get(),
@@ -212,9 +210,9 @@ void Mysql::Connection::setSchema( const std::string &schema )
       throw std::runtime_error( "Current database could not be changed to " + schema );
 }
 
-boost::shared_ptr< Mysql::Statement > Mysql::Connection::createStatement()
+std::shared_ptr< Mysql::Statement > Mysql::Connection::createStatement()
 {
-   return boost::make_shared< Mysql::Statement >( shared_from_this() );
+   return std::make_shared< Mysql::Statement >( shared_from_this() );
 }
 
 MYSQL* Mysql::Connection::getRawCon()
@@ -230,7 +228,7 @@ std::string Mysql::Connection::getError()
    return "";
 }
 
-boost::shared_ptr< Mysql::PreparedStatement > Mysql::Connection::prepareStatement( const std::string &sql )
+std::shared_ptr< Mysql::PreparedStatement > Mysql::Connection::prepareStatement( const std::string &sql )
 {
    MYSQL_STMT* stmt = mysql_stmt_init( getRawCon() );
 
@@ -240,7 +238,7 @@ boost::shared_ptr< Mysql::PreparedStatement > Mysql::Connection::prepareStatemen
    if( mysql_stmt_prepare( stmt, sql.c_str(), sql.size() ) )
       throw std::runtime_error( "Could not prepare statement: " + getError() );
 
-   return boost::make_shared< PreparedStatement >( stmt, shared_from_this() );
+   return std::make_shared< PreparedStatement >( stmt, shared_from_this() );
 }
 
 uint32_t Mysql::Connection::getErrorNo()

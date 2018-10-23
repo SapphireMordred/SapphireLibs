@@ -5,12 +5,10 @@
 
 #include <unordered_map>
 
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 
-namespace xiv
-{
-namespace dat
-{
+namespace xiv {
+namespace dat {
 
 struct IndexBlockRecord;
 
@@ -18,7 +16,7 @@ class Index : public SqPack
 {
 public:
    // Full path to the index file
-   Index( const boost::filesystem::path& i_path );
+   Index( const std::experimental::filesystem::path& i_path );
    virtual ~Index();
 
    // An entry in the hash table, representing a file in a given dat
