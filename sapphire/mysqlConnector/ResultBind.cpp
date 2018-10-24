@@ -123,7 +123,6 @@ namespace Mysql
          m_len.reset( new unsigned long[m_numFields] );
          memset( m_len.get(), 0, sizeof( unsigned long ) * m_numFields );
 
-         //boost::scoped_ptr< NativeAPI::NativeResultsetWrapper > resultMeta(proxy->result_metadata());
 
          MYSQL_RES* info = mysql_stmt_result_metadata( m_pStmt );
          for( uint32_t i = 0; i < m_numFields; ++i )

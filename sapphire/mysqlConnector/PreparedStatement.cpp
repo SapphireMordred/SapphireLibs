@@ -2,7 +2,7 @@
 #include "PreparedResultSet.h"
 #include "Connection.h"
 #include "ResultBind.h"
-#include <boost/variant.hpp>
+#include <variant>
 #include <errmsg.h>
 #include <string.h>
 
@@ -13,14 +13,13 @@ namespace Mysql
 {
 
 // Visitor class to send long data contained in blob_bind
-class LongDataSender : public boost::static_visitor< bool >
+struct LongDataSender
 {
    unsigned	position;
    MYSQL_STMT* m_pStmt;
    LongDataSender()
    {}
 
-public:
 
    LongDataSender( MYSQL_STMT* pStmt, unsigned int i ) :
      position( i ),
@@ -105,9 +104,8 @@ public:
 };
 
 
-class BlobBindDeleter : public boost::static_visitor<>
+struct BlobBindDeleter
 {
-public:
 
    void operator()( std::string*& str ) const
    {
@@ -128,9 +126,8 @@ public:
    }
 };
 
-class BlobIsNull : public boost::static_visitor< bool >
+struct BlobIsNull
 {
-public:
 
    bool operator()( std::string*& str ) const
    {
@@ -162,7 +159,7 @@ class ParamBind
 {
 public:
 
-   typedef boost::variant< std::istream*, std::string* > Blob_t;
+   typedef std::variant< std::istream*, std::string* > Blob_t;
 
 private:
 
@@ -208,7 +205,7 @@ public:
          if( delete_blob_after_execute[it->first] )
          {
             delete_blob_after_execute[it->first] = false;
-            boost::apply_visitor( BlobBindDeleter(), it->second );
+            std::visit( BlobBindDeleter(), it->second );
          }
       }
    }
@@ -224,7 +221,7 @@ public:
       if( delete_blob_after_execute[position] )
       {
          delete_blob_after_execute[position] = false;
-         boost::apply_visitor( BlobBindDeleter(), blob_bind[position] );
+         std::visit( BlobBindDeleter(), blob_bind[position] );
          blob_bind.erase( position );
       }
    }
@@ -238,9 +235,9 @@ public:
 
       Blobs::iterator it = blob_bind.find( position );
       if( it != blob_bind.end() && delete_blob_after_execute[position] )
-          boost::apply_visitor( BlobBindDeleter(), it->second );
+          std::visit( BlobBindDeleter(), it->second );
 
-      if( boost::apply_visitor( BlobIsNull(), blob ) )
+      if( std::visit( BlobIsNull(), blob ) )
       {
          if( it != blob_bind.end() )
             blob_bind.erase( it );
@@ -279,7 +276,7 @@ public:
             Blobs::iterator it = blob_bind.find( i );
             if( it != blob_bind.end() && delete_blob_after_execute[i] )
             {
-               boost::apply_visitor( BlobBindDeleter(), it->second );
+               std::visit( BlobBindDeleter(), it->second );
                blob_bind.erase( it );
             }
             blob_bind[i] = Blob_t();
@@ -294,7 +291,7 @@ public:
    }
 
 
-   boost::variant< std::istream*, std::string* > getBlobObject( uint32_t position )
+   std::variant< std::istream*, std::string* > getBlobObject( uint32_t position )
    {
       Blobs::iterator it = blob_bind.find( position );
 
@@ -355,7 +352,7 @@ bool Mysql::PreparedStatement::sendLongDataBeforeParamBind()
       {
          LongDataSender lv( m_pStmt, i );
          ParamBind::Blob_t dummy( m_pParamBind->getBlobObject( i ) );
-         boost::apply_visitor( lv, dummy );
+         std::visit( lv, dummy );
       }
    }
    return true;
