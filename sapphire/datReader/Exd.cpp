@@ -57,8 +57,9 @@ namespace xiv
          for ( auto &file_ptr : _files )
          {
             // Get a stream
-            auto stream_ptr = utils::stream::get_istream( file_ptr->get_data_sections().front());
-            auto &stream = *stream_ptr;
+	    std::vector< char > dataCpy = file_ptr->get_data_sections().front();
+            xiv::utils::stream::vectorwrapbuf<char> databuf(dataCpy);
+            std::istream stream(&databuf);
 
             // Extract the header and skip to the record indices
             auto exd_header = extract< ExdHeader >( stream );
@@ -91,8 +92,9 @@ namespace xiv
          const uint32_t member_count = _exh->get_members().size();
          auto& file_ptr = cacheEntryIt->second.file;
 
-         auto stream_ptr = utils::stream::get_istream( file_ptr->get_data_sections().front() );
-         auto& stream = *stream_ptr;
+         std::vector< char > dataCpy = file_ptr->get_data_sections().front();
+         xiv::utils::stream::vectorwrapbuf<char> databuf(dataCpy);
+         std::istream stream(&databuf);
 
          // Get the vector fields for the given record and preallocate it
          auto fields = _data[id];
@@ -177,8 +179,9 @@ namespace xiv
          for( auto& file_ptr : _files )
          {
             // Get a stream
-            auto stream_ptr = utils::stream::get_istream( file_ptr->get_data_sections().front() );
-            auto& stream = *stream_ptr;
+            std::vector< char > dataCpy = file_ptr->get_data_sections().front();
+            xiv::utils::stream::vectorwrapbuf<char> databuf(dataCpy);
+            std::istream stream(&databuf);
 
             // Extract the header and skip to the record indices
             auto exd_header = extract<ExdHeader>( stream );

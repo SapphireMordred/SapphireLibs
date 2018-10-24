@@ -14,8 +14,9 @@ namespace exd
 Exh::Exh(const dat::File& i_file)
 {
     // Get a stream from the file
-    auto stream_ptr = utils::stream::get_istream(i_file.get_data_sections().front());
-    auto& stream = *stream_ptr;
+    std::vector< char > dataCpy = i_file.get_data_sections().front();
+    xiv::utils::stream::vectorwrapbuf<char> databuf(dataCpy);
+    std::istream stream(&databuf);
 
     // Extract header and skip to member definitions
     _header = extract<ExhHeader>(stream);

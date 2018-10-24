@@ -19,8 +19,10 @@ ExdData::ExdData(dat::GameData& i_game_data) try :
 
     // Fetch the root.exl and get a stream from it
     auto root_exl = i_game_data.getFile("exd/root.exl");
-    auto stream_ptr = utils::stream::get_istream(root_exl->get_data_sections().front());
-    auto& stream = *stream_ptr;
+    std::vector< char > dataCpy = root_exl->get_data_sections().front();
+    xiv::utils::stream::vectorwrapbuf<char> databuf(dataCpy);
+    std::istream stream(&databuf);
+
 
     // Iterates over the lines while skipping the first one
     std::string line;
